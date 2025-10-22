@@ -1941,7 +1941,6 @@
         </div>
       `;
     }
-
     function submitAnswers() {
      const totalQuestions = GAME.settings.questionsPerCell;
       const answeredCount = Object.keys(GAME.selectedAnswers).length;
@@ -1992,8 +1991,7 @@
       GAME.state.stats[GAME.state.currentTurn].streak = 0;
     }
   });
-  
-  // Rest of the function remains the same...
+      
   const timeBonus = GAME.settings.timerEnabled ? Math.max(0, GAME.state.timeLeft) : 0;
   const baseXP = correctCount * 10;
   const bonusXP = isSpecial ? baseXP : 0;
