@@ -861,16 +861,16 @@
     }
 
     .option-btn.correct {
-      background: rgba(52, 199, 150, 0.2);
-      border-color: #34c796;
-      color: #34c796;
+      background: rgba(52, 199, 150, 0.3) !important;
+      border-color: #34c796 !important;
+      color: #34c796 !important;
       font-weight: 700;
     }
 
     .option-btn.wrong {
-      background: rgba(255, 59, 100, 0.2);
-      border-color: #ff3b64;
-      color: #ff3b64;
+      background: rgba(255, 149, 0, 0.3) !important;
+      border-color: #ff9500 !important;
+      color: #ff9500 !important;
       font-weight: 700;
     }
 
@@ -892,9 +892,9 @@
     }
 
     .feedback.wrong {
-      background: rgba(255, 59, 100, 0.15);
-      border: 1px solid rgba(255, 59, 100, 0.3);
-      color: #ff3b64;
+      background: rgba(255, 149, 0, 0.15);
+      border: 1px solid rgba(255, 149, 0, 0.3);
+      color: #ff9500;
       display: block;
     }
 
@@ -1941,94 +1941,197 @@
         </div>
       `;
     }
+
     function submitAnswers() {
-     const totalQuestions = GAME.settings.questionsPerCell;
+      const totalQuestions = GAME.settings.questionsPerCell;
       const answeredCount = Object.keys(GAME.selectedAnswers).length;
-  
-     if (answeredCount < totalQuestions) {
-    showFeedback(`⚠️ Please answer all ${totalQuestions} questions! (${answeredCount}/${totalQuestions} answered)`, true);
-    return;
-  }
-  
-  stopTimer();
-  
-  const cellIndex = GAME.state.activeCell;
-  const questions = GAME.state.cellQuestionSets[cellIndex];
-  const isSpecial = GAME.state.specialCells.includes(cellIndex);
-  
-  let correctCount = 0;
-  let allCorrect = true;
-  
-  questions.forEach((q, idx) => {
-    const selected = GAME.selectedAnswers[idx];
-    const correct = q.ans;
-    const feedback = document.getElementById(`feedback-${idx}`);
-    const card = document.querySelector(`[data-q-index="${idx}"]`);
-    const buttons = card.querySelectorAll('.option-btn');
-    
-    buttons.forEach(btn => btn.disabled = true);
-    
-    GAME.state.totalQuestionsAnswered++;
-    GAME.profile.totalQuestions++;
-    
-    if (selected === correct) {
-      correctCount++;
-      feedback.innerHTML = `✅ Correct! ${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
-      feedback.className = 'feedback correct';
-      buttons[selected].classList.add('correct');
       
-      GAME.state.stats[GAME.state.currentTurn].streak++;
-      GAME.profile.totalCorrect++;
-    } else {
-      allCorrect = false;
-      feedback.innerHTML = `❌ Wrong! Answer: ${q.opts[correct]}${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
-      feedback.className = 'feedback wrong';
-      if (selected !== undefined) {
-        buttons[selected].classList.add('wrong');
+      if (answeredCount < totalQuestions) {
+        showFeedback(`⚠️ Please answer all ${totalQuestions} questions! (${answeredCount}/${totalQuestions} answered)`, true);
+        return;
       }
-      buttons[correct].classList.add('correct');
       
-      GAME.state.stats[GAME.state.currentTurn].streak = 0;
+      stopTimer();
+      
+      const cellIndex = GAME.state.activeCell;
+      const questions = GAME.state.cellQuestionSets[cellIndex];
+      const isSpecial = GAME.state.specialCells.includes(cellIndex);
+      
+      let correctCount = 0;
+      let allCorrect = true;
+      
+      questions.forEach((q, idx) => {
+        const selected = GAME.selectedAnswers[idx];
+        const correct = q.ans;
+        const feedback = document.getElementById(`feedback-${idx}`);
+        const card = document.querySelector(`[data-q-index="${idx}"]`);
+        const buttons = card.querySelectorAll('.option-btn');
+        
+        buttons.forEach(btn => btn.disabled = true);
+        
+        GAME.state.totalQuestionsAnswered++;
+        GAME.profile.totalQuestions++;
+        
+        if (selected === correct) {
+          correctCount++;
+          feedback.innerHTML = `✅ Correct! ${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
+          feedback.className = 'feedback correct';
+          buttons[selected].classList.add('correct');
+          
+          GAME.state.stats[GAME.state.currentTurn].streak++;
+          GAME.profile.totalCorrect++;
+        } else {
+          allCorrect = false;
+          feedback.innerHTML = `❌ Wrong! Correct answer: ${q.opts[correct]}${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
+          feedback.className = 'feedback wrong';
+          
+          if (selected !== undefined) {
+            buttons[selected].classList.add('wrong');
+          }
+          
+          buttons[correct].classList.add('correct');
+          
+          GAME.state.stats[GAME.state.currentTurn].streak = 0;
+        }
+      });
+      
+      const timeBonus = GAME.settings.timerEnabled ? Math.max(0, GAME.state.timeLeft) : 0;
+      const baseXP = correctCount * 10;
+      const bonusXP = isSpecial ? baseXP : 0;
+      const totalXP = baseXP + timeBonus + bonusXP;
+      
+      awardXP(totalXP, 'questions');
+      
+      GAME.state.stats[GAME.state.currentTurn].correctAnswers += correctCount;
+      
+      if (allCorrect && questions.length >= 5) {
+        unlockAchievement('perfectionist');
+      }
+      
+      const timeElapsed = (Date.now() - GAME.state.questionStartTime) / 1000;
+      if (timeElapsed < 60 && questions.length >= 5 && allCorrect) {
+        unlockAchievement('speed_demon');
+      }
+      
+      checkAchievements();
+      
+      // Replace modal footer with Return button
+      const modalFooter = document.querySelector('.modal-footer');
+      modalFooter.innerHTML = `
+        <button class="btn btn-secondary" onclick="closeModalAndReturn()">← Return</button>
+      `;
+      
+      if (correctCount === GAME.settings.questionsPerCell) {
+        setTimeout(() => {
+          claimCell(cellIndex, isSpecial);
+          closeModal();
+          checkRoundEnd();
+        }, 5000); // Give 5 seconds to review
+      } else {
+        setTimeout(() => {
+          showFeedback(`${correctCount}/${GAME.settings.questionsPerCell} correct! Cell not claimed.`, true);
+          switchTurn();
+          closeModal();
+        }, 5000); // Give 5 seconds to review
+      }
+      
+      updateStats();
+      updatePowerupButtons();
     }
-  });
+
+    function closeModalAndReturn() {
+      stopTimer();
+      document.getElementById('modalOverlay').classList.remove('show');
+      GAME.state.activeCell = null;
+      GAME.state.activePowerup = null;
+      Object.keys(GAME.selectedAnswers).forEach(k => delete GAME.selectedAnswers[k]);
+    }
+
+    function claimCell(cellIndex, isSpecial) {
+      GAME.state.boardState[cellIndex] = GAME.state.currentTurn;
+      GAME.state.stats[GAME.state.currentTurn].cellsClaimed++;
       
-  const timeBonus = GAME.settings.timerEnabled ? Math.max(0, GAME.state.timeLeft) : 0;
-  const baseXP = correctCount * 10;
-  const bonusXP = isSpecial ? baseXP : 0;
-  const totalXP = baseXP + timeBonus + bonusXP;
-  
-  awardXP(totalXP, 'questions');
-  
-  GAME.state.stats[GAME.state.currentTurn].correctAnswers += correctCount;
-  
-  if (allCorrect && questions.length >= 5) {
-    unlockAchievement('perfectionist');
-  }
-  
-  const timeElapsed = (Date.now() - GAME.state.questionStartTime) / 1000;
-  if (timeElapsed < 60 && questions.length >= 5 && allCorrect) {
-    unlockAchievement('speed_demon');
-  }
-  
-  checkAchievements();
-  
-  if (correctCount === GAME.settings.questionsPerCell) {
-    setTimeout(() => {
-      claimCell(cellIndex, isSpecial);
-      closeModal();
-      checkRoundEnd();
-    }, 2500);
-  } else {
-    setTimeout(() => {
-      showFeedback(`❌ ${correctCount}/${GAME.settings.questionsPerCell} correct!`, true);
-      switchTurn();
-      closeModal();
-    }, 3500);
-  } 
-  Object.keys(GAME.selectedAnswers).forEach(k => delete GAME.selectedAnswers[k]);
-  updateStats();
-  updatePowerupButtons();
-}
+      if (isSpecial) {
+        const currentPlayer = GAME.state.stats[GAME.state.currentTurn];
+        currentPlayer.powerups.hint++;
+        currentPlayer.powerups.skip++;
+        showFeedback(`⭐ BONUS! ${GAME.state.currentTurn} gets extra power-ups!`, false);
+      }
+      
+      renderBoard();
+      updateStats();
+      updatePowerupButtons();
+    }
+
+    function switchTurn() {
+      GAME.state.currentTurn = GAME.state.currentTurn === 'X' ? 'O' : 'X';
+      updateTurnIndicator();
+      updatePowerupButtons();
+    }
+
+    function updateTurnIndicator() {
+      document.getElementById('panelX').classList.toggle('active', GAME.state.currentTurn === 'X');
+      document.getElementById('panelO').classList.toggle('active', GAME.state.currentTurn === 'O');
+    }
+
+    function checkRoundEnd() {
+      const size = GAME.settings.gridSize;
+      const board = GAME.state.boardState;
+      
+      const checkLine = (a, b, c) => {
+        return board[a] && board[a] === board[b] && board[a] === board[c] ? board[a] : null;
+      };
+      
+      // Check rows
+      for (let i = 0; i < size; i++) {
+        const start = i * size;
+        if (size === 3) {
+          const winner = checkLine(start, start + 1, start + 2);
+          if (winner) { handleRoundWin(winner); return; }
+        } else if (size === 4) {
+          const winner = checkLine(start, start + 1, start + 2) || 
+                         checkLine(start + 1, start + 2, start + 3);
+          if (winner) { handleRoundWin(winner); return; }
+        } else if (size === 5) {
+          const winner = checkLine(start, start + 1, start + 2) || 
+                         checkLine(start + 1, start + 2, start + 3) ||
+                         checkLine(start + 2, start + 3, start + 4);
+          if (winner) { handleRoundWin(winner); return; }
+        }
+      }
+      
+      // Check columns
+      for (let i = 0; i < size; i++) {
+        if (size === 3) {
+          const winner = checkLine(i, i + size, i + size * 2);
+          if (winner) { handleRoundWin(winner); return; }
+        } else if (size === 4) {
+          const winner = checkLine(i, i + size, i + size * 2) ||
+                         checkLine(i + size, i + size * 2, i + size * 3);
+          if (winner) { handleRoundWin(winner); return; }
+        } else if (size === 5) {
+          const winner = checkLine(i, i + size, i + size * 2) ||
+                         checkLine(i + size, i + size * 2, i + size * 3) ||
+                         checkLine(i + size * 2, i + size * 3, i + size * 4);
+          if (winner) { handleRoundWin(winner); return; }
+        }
+      }
+      
+      // Check diagonals
+      if (size === 3) {
+        let winner = checkLine(0, 4, 8) || checkLine(2, 4, 6);
+        if (winner) { handleRoundWin(winner); return; }
+      }
+      
+      // Check for draw
+      if (!board.includes(null)) {
+        handleRoundDraw();
+      }
+    }
+
+    function handleRoundWin(winner) {
+      GAME.state.stats[winner].roundsWon++;
+      updateStats();
       awardXP(100, 'round_win');
       
       setTimeout(() => {
@@ -2179,6 +2282,7 @@
       document.getElementById('modalOverlay').classList.remove('show');
       GAME.state.activeCell = null;
       GAME.state.activePowerup = null;
+      Object.keys(GAME.selectedAnswers).forEach(k => delete GAME.selectedAnswers[k]);
     }
 
     function showFeedback(msg, isError) {
