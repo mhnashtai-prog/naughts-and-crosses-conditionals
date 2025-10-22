@@ -1943,172 +1943,94 @@
     }
 
     function submitAnswers() {
-      stopTimer();
+     const totalQuestions = GAME.settings.questionsPerCell;
+      const answeredCount = Object.keys(GAME.selectedAnswers).length;
+  
+     if (answeredCount < totalQuestions) {
+    showFeedback(`⚠️ Please answer all ${totalQuestions} questions! (${answeredCount}/${totalQuestions} answered)`, true);
+    return;
+  }
+  
+  stopTimer();
+  
+  const cellIndex = GAME.state.activeCell;
+  const questions = GAME.state.cellQuestionSets[cellIndex];
+  const isSpecial = GAME.state.specialCells.includes(cellIndex);
+  
+  let correctCount = 0;
+  let allCorrect = true;
+  
+  questions.forEach((q, idx) => {
+    const selected = GAME.selectedAnswers[idx];
+    const correct = q.ans;
+    const feedback = document.getElementById(`feedback-${idx}`);
+    const card = document.querySelector(`[data-q-index="${idx}"]`);
+    const buttons = card.querySelectorAll('.option-btn');
+    
+    buttons.forEach(btn => btn.disabled = true);
+    
+    GAME.state.totalQuestionsAnswered++;
+    GAME.profile.totalQuestions++;
+    
+    if (selected === correct) {
+      correctCount++;
+      feedback.innerHTML = `✅ Correct! ${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
+      feedback.className = 'feedback correct';
+      buttons[selected].classList.add('correct');
       
-      const cellIndex = GAME.state.activeCell;
-      const questions = GAME.state.cellQuestionSets[cellIndex];
-      const isSpecial = GAME.state.specialCells.includes(cellIndex);
-      
-      let correctCount = 0;
-      let allCorrect = true;
-      
-      questions.forEach((q, idx) => {
-        const selected = GAME.selectedAnswers[idx];
-        const correct = q.ans;
-        const feedback = document.getElementById(`feedback-${idx}`);
-        const card = document.querySelector(`[data-q-index="${idx}"]`);
-        const buttons = card.querySelectorAll('.option-btn');
-        
-        buttons.forEach(btn => btn.disabled = true);
-        
-        GAME.state.totalQuestionsAnswered++;
-        GAME.profile.totalQuestions++;
-        
-        if (selected === correct) {
-          correctCount++;
-          feedback.innerHTML = `✅ Correct! ${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
-          feedback.className = 'feedback correct';
-          buttons[selected].classList.add('correct');
-          
-          GAME.state.stats[GAME.state.currentTurn].streak++;
-          GAME.profile.totalCorrect++;
-        } else {
-          allCorrect = false;
-          feedback.innerHTML = `❌ Wrong! Answer: ${q.opts[correct]}${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
-          feedback.className = 'feedback wrong';
-          if (selected !== undefined) {
-            buttons[selected].classList.add('wrong');
-          }
-          buttons[correct].classList.add('correct');
-          
-          GAME.state.stats[GAME.state.currentTurn].streak = 0;
-        }
-      });
-      
-      const timeBonus = GAME.settings.timerEnabled ? Math.max(0, GAME.state.timeLeft) : 0;
-      const baseXP = correctCount * 10;
-      const bonusXP = isSpecial ? baseXP : 0;
-      const totalXP = baseXP + timeBonus + bonusXP;
-      
-      awardXP(totalXP, 'questions');
-      
-      GAME.state.stats[GAME.state.currentTurn].correctAnswers += correctCount;
-      
-      if (allCorrect && questions.length >= 5) {
-        unlockAchievement('perfectionist');
+      GAME.state.stats[GAME.state.currentTurn].streak++;
+      GAME.profile.totalCorrect++;
+    } else {
+      allCorrect = false;
+      feedback.innerHTML = `❌ Wrong! Answer: ${q.opts[correct]}${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
+      feedback.className = 'feedback wrong';
+      if (selected !== undefined) {
+        buttons[selected].classList.add('wrong');
       }
+      buttons[correct].classList.add('correct');
       
-      const timeElapsed = (Date.now() - GAME.state.questionStartTime) / 1000;
-      if (timeElapsed < 60 && questions.length >= 5 && allCorrect) {
-        unlockAchievement('speed_demon');
-      }
-      
-      checkAchievements();
-      
-      if (correctCount === GAME.settings.questionsPerCell) {
-        setTimeout(() => {
-          claimCell(cellIndex, isSpecial);
-          closeModal();
-          checkRoundEnd();
-        }, 2500);
-      } else {
-        setTimeout(() => {
-          showFeedback(`❌ ${correctCount}/${GAME.settings.questionsPerCell} correct!`, true);
-          switchTurn();
-          closeModal();
-        }, 3500);
-      }
-      
-      Object.keys(GAME.selectedAnswers).forEach(k => delete GAME.selectedAnswers[k]);
-      updateStats();
-      updatePowerupButtons();
+      GAME.state.stats[GAME.state.currentTurn].streak = 0;
     }
-
-    function claimCell(cellIndex, isSpecial) {
-      GAME.state.boardState[cellIndex] = GAME.state.currentTurn;
-      GAME.state.stats[GAME.state.currentTurn].cellsClaimed++;
-      
-      const cell = document.querySelector(`[data-cell="${cellIndex}"]`);
-      cell.textContent = GAME.state.currentTurn === 'X' ? '❌' : '⭕';
-      cell.classList.add(`claimed-${GAME.state.currentTurn}`);
-      cell.classList.remove('special-cell');
-      
-      if (isSpecial) {
-        showFeedback(`🎉 ${GAME.state.currentTurn} claimed BONUS cell! +1 Power-up!`, false);
-        const powerup = Math.random() > 0.5 ? 'hint' : 'skip';
-        GAME.state.stats[GAME.state.currentTurn].powerups[powerup]++;
-      } else {
-        showFeedback(`🎉 ${GAME.state.currentTurn} claimed cell!`, false);
-      }
-      
-      updateStats();
-      updatePowerupButtons();
+  });
+  
+  // Rest of the function remains the same...
+  const timeBonus = GAME.settings.timerEnabled ? Math.max(0, GAME.state.timeLeft) : 0;
+  const baseXP = correctCount * 10;
+  const bonusXP = isSpecial ? baseXP : 0;
+  const totalXP = baseXP + timeBonus + bonusXP;
+  
+  awardXP(totalXP, 'questions');
+  
+  GAME.state.stats[GAME.state.currentTurn].correctAnswers += correctCount;
+  
+  if (allCorrect && questions.length >= 5) {
+    unlockAchievement('perfectionist');
+  }
+  
+  const timeElapsed = (Date.now() - GAME.state.questionStartTime) / 1000;
+  if (timeElapsed < 60 && questions.length >= 5 && allCorrect) {
+    unlockAchievement('speed_demon');
+  }
+  
+  checkAchievements();
+  
+  if (correctCount === GAME.settings.questionsPerCell) {
+    setTimeout(() => {
+      claimCell(cellIndex, isSpecial);
+      closeModal();
+      checkRoundEnd();
+    }, 2500);
+  } else {
+    setTimeout(() => {
+      showFeedback(`❌ ${correctCount}/${GAME.settings.questionsPerCell} correct!`, true);
       switchTurn();
-    }
-
-    function switchTurn() {
-      GAME.state.currentTurn = GAME.state.currentTurn === 'X' ? 'O' : 'X';
-      updateTurnIndicator();
-      updatePowerupButtons();
-    }
-
-    function updateTurnIndicator() {
-      document.getElementById('panelX').classList.toggle('active', GAME.state.currentTurn === 'X');
-      document.getElementById('panelO').classList.toggle('active', GAME.state.currentTurn === 'O');
-    }
-
-    function checkRoundEnd() {
-      const size = GAME.settings.gridSize;
-      const b = GAME.state.boardState;
-      
-      const patterns = [];
-      
-      for (let row = 0; row < size; row++) {
-        const pattern = [];
-        for (let col = 0; col < size; col++) {
-          pattern.push(row * size + col);
-        }
-        patterns.push(pattern);
-      }
-      
-      for (let col = 0; col < size; col++) {
-        const pattern = [];
-        for (let row = 0; row < size; row++) {
-          pattern.push(row * size + col);
-        }
-        patterns.push(pattern);
-      }
-      
-      const diag1 = [];
-      const diag2 = [];
-      for (let i = 0; i < size; i++) {
-        diag1.push(i * size + i);
-        diag2.push(i * size + (size - 1 - i));
-      }
-      patterns.push(diag1, diag2);
-      
-      for (let pattern of patterns) {
-        const values = pattern.map(i => b[i]);
-        if (values[0] && values.every(v => v === values[0])) {
-          handleRoundWin(values[0]);
-          return;
-        }
-      }
-      
-      if (b.every(cell => cell !== null)) {
-        handleRoundDraw();
-      }
-    }
-
-    function handleRoundWin(winner) {
-      GAME.state.stats[winner].roundsWon++;
-      updateStats();
-      
-      const loser = winner === 'X' ? 'O' : 'X';
-      if (GAME.state.stats[loser].cellsClaimed > GAME.state.stats[winner].cellsClaimed) {
-        unlockAchievement('comeback_king');
-      }
-      
+      closeModal();
+    }, 3500);
+  } 
+  Object.keys(GAME.selectedAnswers).forEach(k => delete GAME.selectedAnswers[k]);
+  updateStats();
+  updatePowerupButtons();
+}
       awardXP(100, 'round_win');
       
       setTimeout(() => {
