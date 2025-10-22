@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INTUITY - C1/C2 Conditionals Master</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1d3a 100%);
+      color: white;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1.25rem 0 1rem;
+      position: relative;
+    }
+
+    .profile-badge {
+      position: absolute;
+      top: 0;
+      right: 1rem;
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: blur(20px);
+      padding: 0.5rem 1rem;
+      border-radius: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid rgba(201, 169, 97, 0.25);
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-badge:hover {
+      background: rgba(28, 28, 30, 0.95);
+      border-color: #C9A961;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 169, 97, 0.2);
+    }
+
+    .achievement-icon { font-size: 1.5rem; }
+    .xp-display { font-size: 0.75rem; color: #C9A961; font-weight: 600; }
+
+    .header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #C9A961;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #C9A961 0%, rgba(201, 169, 97, 0.8) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header .subtitle {
+      font-size: 0.8125rem;
+      color: #8e8e93;
+      margin-bottom: 0.375rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .header .author {
+      font-size: 0.6875rem;
+      color: #636366;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .cambridge-badge {
+      display: inline-block;
+      background: rgba(201, 169, 97, 0.15);
+      padding: 0.5rem 1.5rem;
+      border-radius: 2rem;
+      border: 1px solid rgba(201, 169, 97, 0.3);
+      font-size: 0.75rem;
+      color: #C9A961;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 0.5rem;
+    }
+
+    .mode-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .mode-card {
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: blur(40px) saturate(150%);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1.5px solid rgba(201, 169, 97, 0.25);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .mode-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #C9A961, rgba(201, 169, 97, 0.8));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .mode-card:hover::before { opacity: 1; }
+
+    .mode-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(201, 169, 97, 0.5);
+      box-shadow: 0 12px 40px rgba(201, 169, 97, 0.25);
+      background: rgba(28, 28, 30, 0.95);
+    }
+
+    .mode-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    .mode-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #C9A961;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .mode-desc {
+      font-size: 0.9rem;
+      color: #8e8e93;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .mode-stats {
+      display: flex;
+      justify-content: space-around;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(201, 169, 97, 0.2);
+    }
+
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; color: #C9A961; }
+    .stat-label { font-size: 0.75rem; color: #636366; text-transform: uppercase; }
+
+    .game-settings, .board-container, .player-panel, .achievements-panel {
+      background: rgba(28, 28, 30, 0.85);
+      backdrop-filter: blur(40px) saturate(150%);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      border: 1.5px solid rgba(201, 169, 97, 0.25);
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .setting-group {
+      background: rgba(20, 25, 30, 0.7);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(201, 169, 97, 0.2);
+    }
+
+    .setting-label {
+      font-size: 0.85rem;
+      color: #8e8e93;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .setting-value { font-size: 1.5rem; font-weight: 700; color: #C9A961; }
+
+    .slider {
+      width: 100%;
+      margin-top: 0.75rem;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(201, 169, 97, 0.15);
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #C9A961;
+      cursor: pointer;
+    }
+
+    .difficulty-selector { display: flex; gap: 0.75rem; margin-top: 0.75rem; }
+
+    .difficulty-btn {
+      flex: 1;
+      padding: 0.5rem;
+      background: rgba(20, 25, 30, 0.6);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-radius: 0.5rem;
+      color: #8e8e93;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .difficulty-btn.active {
+      background: rgba(201, 169, 97, 0.15);
+      border-color: #C9A961;
+      color: #C9A961;
+    }
+
+    .scoreboard { display: flex; justify-content: space-between; gap: 1.5rem; margin-bottom: 2rem; }
+    .player-panel { flex: 1; position: relative; overflow: hidden; }
+    .player-panel.active { border-color: #C9A961; box-shadow: 0 0 32px rgba(201, 169, 97, 0.3); }
+
+    .player-emoji { font-size: 4rem; text-align: center; margin-bottom: 1rem; }
+
+    .player-name {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #C9A961;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .player-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+
+    .player-stat {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(20, 25, 30, 0.7);
+      border-radius: 0.75rem;
+    }
+
+    .player-stat-value { font-size: 1.75rem; font-weight: 700; color: #C9A961; }
+    .player-stat-label { font-size: 0.7rem; color: #636366; text-transform: uppercase; margin-top: 0.25rem; }
+
+    .board {
+      display: grid;
+      gap: 1rem;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    .board.size-3 { grid-template-columns: repeat(3, 1fr); }
+    .board.size-4 { grid-template-columns: repeat(4, 1fr); }
+    .board.size-5 { grid-template-columns: repeat(5, 1fr); }
+
+    .cell {
+      aspect-ratio: 1;
+      background: rgba(28, 28, 30, 0.85);
+      border: 2px solid rgba(201, 169, 97, 0.25);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .cell:hover:not(.claimed-X):not(.claimed-O) {
+      transform: scale(1.05);
+      border-color: rgba(201, 169, 97, 0.5);
+    }
+
+    .cell.claimed-X { background: rgba(255, 59, 100, 0.2); border-color: #ff3b64; cursor: not-allowed; }
+    .cell.claimed-O { background: rgba(52, 199, 150, 0.2); border-color: #34c796; cursor: not-allowed; }
+
+    .cell.special-cell {
+      background: linear-gradient(135deg, rgba(201, 169, 97, 0.15), rgba(201, 169, 97, 0.08));
+      border-color: #C9A961;
+      animation: specialGlow 3s ease-in-out infinite;
+    }
+
+    .cell.special-cell::after {
+      content: '⭐';
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      font-size: 1rem;
+    }
+
+    @keyframes specialGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(201, 169, 97, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(201, 169, 97, 0.5); }
+    }
+
+    .controls { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #C9A961 0%, rgba(201, 169, 97, 0.85) 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(201, 169, 97, 0.25);
+    }
+
+    .btn-primary:hover { transform: translateY(-3px); }
+
+    .btn-secondary {
+      background: rgba(28, 28, 30, 0.85);
+      border: 1px solid rgba(201, 169, 97, 0.25);
+      color: #e5e5e7;
+    }
+
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.show { display: flex; }
+
+    .modal {
+      background: rgba(28, 28, 30, 0.98);
+      border: 1.5px solid rgba(201, 169, 97, 0.3);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      max-width: 750px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      color: #C9A961;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .question-card {
+      background: rgba(20, 25, 30, 0.7);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(201, 169, 97, 0.2);
+    }
+
+    .question-text { font-size: 1.1rem; margin-bottom: 1rem; color: #e5e5e7; }
+
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+
+    .option-btn {
+      padding: 1rem;
+      background: rgba(28, 28, 30, 0.85);
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      border-radius: 0.75rem;
+      color: #e5e5e7;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .option-btn:hover:not(:disabled) { border-color: rgba(201, 169, 97, 0.4); }
+    .option-btn.selected { background: rgba(201, 169, 97, 0.15); border-color: #C9A961; }
+    .option-btn.correct { background: rgba(52, 199, 150, 0.2); border-color: #34c796; color: #34c796; }
+    .option-btn.wrong { background: rgba(255, 59, 100, 0.2); border-color: #ff3b64; color: #ff3b64; }
+
+    .feedback { display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 0.5rem; }
+    .feedback.correct { display: block; background: rgba(52, 199, 150, 0.15); color: #34c796; }
+    .feedback.wrong { display: block; background: rgba(255, 59, 100, 0.15); color: #ff3b64; }
+
+    .explanation {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: rgba(201, 169, 97, 0.08);
+      border-left: 3px solid #C9A961;
+      font-size: 0.85rem;
+      color: #8e8e93;
+    }
+
+    .feedback-global {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      padding: 1rem 2rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 9999;
+    }
+
+    .feedback-global.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .feedback-global.success { background: rgba(52, 199, 150, 0.95); color: white; }
+    .feedback-global.error { background: rgba(255, 59, 100, 0.95); color: white; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 768px) {
+      .scoreboard { flex-direction: column; }
+      .options-grid { grid-template-columns: 1fr; }
+      .profile-badge { position: static; margin: 0 auto 1rem; width: fit-content; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="profile-badge" onclick="showAchievements()">
+        <span class="achievement-icon">🎓</span>
+        <span class="xp-display" id="xpDisplay">Level 1 • 0 XP</span>
+      </div>
+      <h1>INTUITY</h1>
+      <p class="subtitle">C1/C2 Conditionals Master</p>
+      <p class="author">by Majid Nashtai</p>
+      <div class="cambridge-badge">Advanced & Proficient Level</div>
+    </div>
+
+    <div id="modeSelector" class="mode-selector">
+      <div class="mode-card" onclick="selectMode('quick')">
+        <div class="mode-icon">⚡</div>
+        <div class="mode-title">Quick Battle</div>
+        <div class="mode-desc">3×3 grid, C1/C2 mixed conditionals</div>
+        <div class="mode-stats">
+          <div class="stat"><div class="stat-value">3×3</div><div class="stat-label">Grid</div></div>
+          <div class="stat"><div class="stat-value">1</div><div class="stat-label">Round</div></div>
+          <div class="stat"><div class="stat-value">5</div><div class="stat-label">Q/Cell</div></div>
+        </div>
+      </div>
+
+      <div class="mode-card" onclick="selectMode('advanced')">
+        <div class="mode-icon">🎯</div>
+        <div class="mode-title">Advanced Mode</div>
+        <div class="mode-desc">Best of 3, complex structures</div>
+        <div class="mode-stats">
+          <div class="stat"><div class="stat-value">3×3</div><div class="stat-label">Grid</div></div>
+          <div class="stat"><div class="stat-value">3</div><div class="stat-label">Rounds</div></div>
+          <div class="stat"><div class="stat-value">5</div><div class="stat-label">Q/Cell</div></div>
+        </div>
+      </div>
+
+      <div class="mode-card" onclick="selectMode('marathon')">
+        <div class="mode-icon">🚀</div>
+        <div class="mode-title">Conditionals Marathon</div>
+        <div class="mode-desc">4×4 grid, timed challenge</div>
+        <div class="mode-stats">
+          <div class="stat"><div class="stat-value">4×4</div><div class="stat-label">Grid</div></div>
+          <div class="stat"><div class="stat-value">1</div><div class="stat-label">Round</div></div>
+          <div class="stat"><div class="stat-value">4</div><div class="stat-label">Q/Cell</div></div>
+        </div>
+      </div>
+
+      <div class="mode-card" onclick="selectMode('custom')">
+        <div class="mode-icon">⚙️</div>
+        <div class="mode-title">Custom</div>
+        <div class="mode-desc">Design your own challenge</div>
+        <div class="mode-stats">
+          <div class="stat"><div class="stat-value">?</div><div class="stat-label">Custom</div></div>
+          <div class="stat"><div class="stat-value">?</div><div class="stat-label">Custom</div></div>
+          <div class="stat"><div class="stat-value">?</div><div class="stat-label">Custom</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="gameSettings" class="game-settings hidden">
+      <h2 style="color: #C9A961; text-align: center; margin-bottom: 1.5rem;">GAME SETTINGS</h2>
+      <div class="settings-grid">
+        <div class="setting-group">
+          <div class="setting-label">Grid Size</div>
+          <div class="setting-value" id="gridSizeValue">3×3</div>
+          <input type="range" class="slider" id="gridSizeSlider" min="3" max="5" value="3" oninput="updateGridSize(this.value)">
+        </div>
+        <div class="setting-group">
+          <div class="setting-label">Total Rounds</div>
+          <div class="setting-value" id="roundsValue">1</div>
+          <input type="range" class="slider" id="roundsSlider" min="1" max="5" value="1" oninput="updateRounds(this.value)">
+        </div>
+        <div class="setting-group">
+          <div class="setting-label">Questions per Cell</div>
+          <div class="setting-value" id="questionsValue">5</div>
+          <input type="range" class="slider" id="questionsSlider" min="3" max="7" value="5" oninput="updateQuestions(this.value)">
+        </div>
+        <div class="setting-group">
+          <div class="setting-label">Difficulty Level</div>
+          <div class="difficulty-selector">
+            <button class="difficulty-btn active" onclick="setDifficulty('advanced')">C1</button>
+            <button class="difficulty-btn" onclick="setDifficulty('proficient')">C2</button>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn btn-secondary" onclick="backToModes()">← Back</button>
+        <button class="btn btn-primary" onclick="startGame()">Start Game →</button>
+      </div>
+    </div>
+
+    <div id="gameArea" class="hidden">
+      <div class="scoreboard">
+        <div class="player-panel" id="panelX">
+          <div class="player-emoji">❌</div>
+          <div class="player-name">Player X</div>
+          <div class="player-stats">
+            <div class="player-stat"><div class="player-stat-value" id="winsX">0</div><div class="player-stat-label">Wins</div></div>
+            <div class="player-stat"><div class="player-stat-value" id="cellsX">0</div><div class="player-stat-label">Cells</div></div>
+            <div class="player-stat"><div class="player-stat-value" id="correctX">0</div><div class="player-stat-label">Correct</div></div>
+          </div>
+        </div>
+        <div class="player-panel" id="panelO">
+          <div class="player-emoji">⭕</div>
+          <div class="player-name">Player O</div>
+          <div class="player-stats">
+            <div class="player-stat"><div class="player-stat-value" id="winsO">0</div><div class="player-stat-label">Wins</div></div>
+            <div class="player-stat"><div class="player-stat-value" id="cellsO">0</div><div class="player-stat-label">Cells</div></div>
+            <div class="player-stat"><div class="player-stat-value" id="correctO">0</div><div class="player-stat-label">Correct</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="board-container">
+        <div class="board size-3" id="board"></div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-secondary" onclick="backToMenu()">← Main Menu</button>
+        <button class="btn btn-primary" onclick="nextRound()" id="nextRoundBtn" style="display:none;">Next Round →</button>
+      </div>
+    </div>
+
+    <div id="achievementsPanel" class="achievements-panel hidden">
+      <h2 style="color: #C9A961; text-align: center; margin-bottom: 1.5rem;">ACHIEVEMENTS</h2>
+      <div id="achievementsGrid"></div>
+      <div class="controls">
+        <button class="btn btn-secondary" onclick="closeAchievements()">← Back</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <div class="feedback-global" id="globalFeedback"></div>
+
+  <script>
+    const QUESTION_BANK = {
+      "ZeroFirst": {
+        advanced: [
+          {q:"If you _____ water to 100°C, it always boils.",opts:["heat","will heat","would heat","heated"],ans:0,exp:"Zero conditional uses present simple in both clauses.",cat:"Zero/First"},
+          {q:"Should the minister resign, the government _____ into crisis.",opts:["plunges","will plunge","would plunge","plunged"],ans:1,exp:"Inverted first conditional: should + subject = if + present.",cat:"Zero/First"},
+          {q:"Unless the board _____ action, shareholders will demand inquiry.",opts:["takes","will take","would take","took"],ans:0,exp:"Unless = if not; requires present simple.",cat:"Zero/First"},
+          {q:"If I _____ information, I shall contact you.",opts:["will receive","receive","would receive","received"],ans:1,exp:"First conditional: present simple in if-clause.",cat:"Zero/First"}
+        ],
+        proficient: [
+          {q:"Were the allegations to prove true, the administration _____ discredited.",opts:["will be","would be","is","were"],ans:1,exp:"Inverted second conditional with were + to-infinitive.",cat:"Zero/First"},
+          {q:"Should it transpire that funds _____ misappropriated, inquiry will ensue.",opts:["were","will be","are","would be"],ans:0,exp:"Past simple after 'should it transpire that'.",cat:"Zero/First"}
+        ]
+      },
+      "SecondThird": {
+        advanced: [
+          {q:"If the government _____ earlier, the crisis might have been averted.",opts:["acted","had acted","would act","would have acted"],ans:1,exp:"Third conditional: past perfect in if-clause.",cat:"Second/Third"},
+          {q:"Were it not for the bank, the market _____ collapsed.",opts:["will have","would have","had","has"],ans:1,exp:"Inverted second conditional: 'were it not for'.",cat:"Second/Third"}
+        ],
+        proficient: [
+          {q:"Had it not been for the whistleblower, the scandal _____ undetected.",opts:["might remain","might have remained","would remain","will have remained"],ans:1,exp:"Inverted third conditional requires perfect conditional.",cat:"Second/Third"},
+        {q:"If the allegations _____ substantiated, implications would be far-reaching.",opts:["was","were","are","had been"],ans:1,exp:"Subjunctive 'were' for hypothetical present in formal register.",cat:"Second/Third"}
+
+          "],ans:1,exp:"Subjunctive 'were' for hypothetical present (formal register, unreal condition).",cat:"Second/Third"}
+           ]
+      }
+    };
+      "Mixed": {
+        advanced: [
+          {q:"If the policy _____ differently, unemployment would not be so high today.",opts:["was implemented","had been implemented","would be implemented","were implemented"],ans:1,exp:"Mixed conditional: past perfect → present result.",cat:"Mixed"},
+          {q:"If I _____ accepted the position, I would be living in Brussels now.",opts:["accepted","would accept","had accepted","would have accepted"],ans:2,exp:"Mixed third→second: past perfect for past action.",cat:"Mixed"}
+        ],
+        proficient: [
+          {q:"Had the chancellor _____ fiscal prudence earlier, the economy would not be in recession now.",opts:["exercise","exercised","been exercising","have been exercising"],ans:1,exp:"Mixed third→second: simple past perfect.",cat:"Mixed"},
+          {q:"If successive governments _____ infrastructure, the transport system would function today.",opts:["maintained","had maintained","would maintain","would have maintained"],ans:1,exp:"Mixed: past perfect → present conditional result.",cat:"Mixed"}
+        ]
+      },
+      "Alternatives": {
+        advanced: [
+          {q:"_____ the minister to resign, his deputy would assume the portfolio.",opts:["Should","Would","Could","Were"],ans:3,exp:"Inverted conditional: 'Were + subject + to-infinitive'.",cat:"Alternatives"},
+          {q:"The bill will not pass _____ the government secures support.",opts:["if","unless","provided","when"],ans:1,exp:"'Unless' = if not; negative condition.",cat:"Alternatives"}
+        ],
+        proficient: [
+          {q:"_____ the tribunal to uphold the ruling, precedent would be altered.",opts:["Should","Were","Had","Would"],ans:1,exp:"'Were + subject + to-infinitive': formal hypothetical future.",cat:"Alternatives"},
+          {q:"The negotiations might have succeeded _____ both parties shown flexibility.",opts:["should","were","had","if"],ans:2,exp:"'Had + subject + past participle' = inverted third conditional.",cat:"Alternatives"}
+        ]
+      }
+    };
+
+    const GAME = {
+      mode: null,
+      settings: { gridSize: 3, totalRounds: 1, questionsPerCell: 5, difficulty: 'advanced' },
+      state: {
+        currentRound: 1,
+        boardState: [],
+        cellQuestionSets: {},
+        specialCells: [],
+        usedQuestionIds: new Set(),
+        currentTurn: 'X',
+        activeCell: null,
+        stats: {
+          X: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0 },
+          O: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0 }
+        }
+      },
+      selectedAnswers: {},
+      profile: { xp: 0, level: 1, totalCorrect: 0, totalQuestions: 0 }
+    };
+
+    const storage = {
+      data: {},
+      getItem(key) { return this.data[key] || null; },
+      setItem(key, value) { this.data[key] = value; }
+    };
+
+    function loadProgress() {
+      const saved = storage.getItem('intuityConditionalsProgress');
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          GAME.profile = {...GAME.profile, ...data};
+        } catch(e) {}
+      }
+      updateXPDisplay();
+    }
+
+    function saveProgress() {
+      storage.setItem('intuityConditionalsProgress', JSON.stringify(GAME.profile));
+    }
+
+    function updateXPDisplay() {
+      document.getElementById('xpDisplay').textContent = `Level ${GAME.profile.level} • ${GAME.profile.xp} XP`;
+    }
+
+    function awardXP(amount) {
+      GAME.profile.xp += amount;
+      const xpForNextLevel = GAME.profile.level * 100;
+      if (GAME.profile.xp >= xpForNextLevel) {
+        GAME.profile.level++;
+        GAME.profile.xp -= xpForNextLevel;
+        showFeedback(`🎊 Level Up! You're now Level ${GAME.profile.level}!`, false);
+      }
+      updateXPDisplay();
+      saveProgress();
+    }
+
+    function showAchievements() {
+      document.getElementById('modeSelector').classList.add('hidden');
+      document.getElementById('achievementsPanel').classList.remove('hidden');
+    }
+
+    function closeAchievements() {
+      document.getElementById('achievementsPanel').classList.add('hidden');
+      document.getElementById('modeSelector').classList.remove('hidden');
+    }
+
+    const MODE_PRESETS = {
+      'quick': { gridSize: 3, totalRounds: 1, questionsPerCell: 5, difficulty: 'advanced' },
+      'advanced': { gridSize: 3, totalRounds: 3, questionsPerCell: 5, difficulty: 'advanced' },
+      'marathon': { gridSize: 4, totalRounds: 1, questionsPerCell: 4, difficulty: 'proficient' },
+      'custom': { gridSize: 3, totalRounds: 1, questionsPerCell: 5, difficulty: 'advanced' }
+    };
+
+    function selectMode(mode) {
+      GAME.mode = mode;
+      GAME.settings = {...MODE_PRESETS[mode]};
+      if (mode === 'custom') {
+        document.getElementById('modeSelector').classList.add('hidden');
+        document.getElementById('gameSettings').classList.remove('hidden');
+        document.getElementById('gridSizeSlider').value = GAME.settings.gridSize;
+        document.getElementById('roundsSlider').value = GAME.settings.totalRounds;
+        document.getElementById('questionsSlider').value = GAME.settings.questionsPerCell;
+        updateGridSize(GAME.settings.gridSize);
+        updateRounds(GAME.settings.totalRounds);
+        updateQuestions(GAME.settings.questionsPerCell);
+      } else {
+        startGame();
+      }
+    }
+
+    function updateGridSize(val) {
+      GAME.settings.gridSize = parseInt(val);
+      document.getElementById('gridSizeValue').textContent = `${val}×${val}`;
+    }
+
+    function updateRounds(val) {
+      GAME.settings.totalRounds = parseInt(val);
+      document.getElementById('roundsValue').textContent = val;
+    }
+
+    function updateQuestions(val) {
+      GAME.settings.questionsPerCell = parseInt(val);
+      document.getElementById('questionsValue').textContent = val;
+    }
+
+    function setDifficulty(level) {
+      GAME.settings.difficulty = level;
+      document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function backToModes() {
+      document.getElementById('gameSettings').classList.add('hidden');
+      document.getElementById('modeSelector').classList.remove('hidden');
+    }
+
+    function startGame() {
+      const size = GAME.settings.gridSize;
+      GAME.state.boardState = Array(size * size).fill(null);
+      GAME.state.currentRound = 1;
+      GAME.state.currentTurn = 'X';
+      GAME.state.cellQuestionSets = {};
+      GAME.state.usedQuestionIds.clear();
+      GAME.state.stats = {
+        X: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0 },
+        O: { roundsWon: 0, cellsClaimed: 0, correctAnswers: 0, streak: 0 }
+      };
+
+      const numSpecial = Math.floor(size * size * 0.2);
+      GAME.state.specialCells = [];
+      while (GAME.state.specialCells.length < numSpecial) {
+        const cell = Math.floor(Math.random() * size * size);
+        if (!GAME.state.specialCells.includes(cell)) {
+          GAME.state.specialCells.push(cell);
+        }
+      }
+
+      document.getElementById('modeSelector').classList.add('hidden');
+      document.getElementById('gameSettings').classList.add('hidden');
+      document.getElementById('gameArea').classList.remove('hidden');
+      
+      updateStats();
+      renderBoard();
+      updateTurnIndicator();
+    }
+
+    function renderBoard() {
+      const board = document.getElementById('board');
+      const size = GAME.settings.gridSize;
+      board.className = `board size-${size}`;
+      board.innerHTML = '';
+      
+      for (let i = 0; i < size * size; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.cell = i;
+        
+        if (GAME.state.specialCells.includes(i) && !GAME.state.boardState[i]) {
+          cell.classList.add('special-cell');
+        }
+        
+        if (GAME.state.boardState[i]) {
+          cell.textContent = GAME.state.boardState[i] === 'X' ? '❌' : '⭕';
+          cell.classList.add(`claimed-${GAME.state.boardState[i]}`);
+        }
+        
+        cell.onclick = () => openCellModal(i);
+        board.appendChild(cell);
+      }
+    }
+
+    function getQuestionId(q) {
+      return `${q.q}_${q.ans}_${q.cat || 'general'}`;
+    }
+
+    function selectFreshQuestions() {
+      const difficulty = GAME.settings.difficulty;
+      const needed = GAME.settings.questionsPerCell;
+      const allQuestions = [];
+      
+      Object.keys(QUESTION_BANK).forEach(category => {
+        const categoryQuestions = QUESTION_BANK[category][difficulty] || [];
+        categoryQuestions.forEach(q => {
+          allQuestions.push({...q, category});
+        });
+      });
+      
+      let available = allQuestions.filter(q => !GAME.state.usedQuestionIds.has(getQuestionId(q)));
+      
+      if (available.length < needed) {
+        GAME.state.usedQuestionIds.clear();
+        available = allQuestions;
+      }
+      
+      const shuffled = available.sort(() => Math.random() - 0.5);
+      const selected = shuffled.slice(0, needed);
+      
+      selected.forEach(q => GAME.state.usedQuestionIds.add(getQuestionId(q)));
+      
+      return selected;
+    }
+
+    function openCellModal(cellIndex) {
+      if (GAME.state.boardState[cellIndex] !== null) {
+        showFeedback('⚠️ This cell is already claimed!', true);
+        return;
+      }
+      
+      GAME.state.activeCell = cellIndex;
+      GAME.state.cellQuestionSets[cellIndex] = selectFreshQuestions();
+      
+      const questions = GAME.state.cellQuestionSets[cellIndex];
+      renderQuestionModal(questions, cellIndex);
+    }
+
+    function renderQuestionModal(questions, cellIndex) {
+      const overlay = document.getElementById('modalOverlay');
+      const content = document.getElementById('modalContent');
+      const isSpecial = GAME.state.specialCells.includes(cellIndex);
+      
+      let html = `
+        <div class="modal-title">Cell ${cellIndex + 1} - ${GAME.state.currentTurn}'s Turn ${isSpecial ? '⭐ BONUS' : ''}</div>
+        <p style="text-align:center;color:#8e8e93;margin-bottom:1.5rem;">Answer ${GAME.settings.questionsPerCell} questions correctly!</p>
+      `;
+      
+      questions.forEach((q, idx) => {
+        html += `
+          <div class="question-card" data-q-index="${idx}">
+            <div class="question-text">${idx + 1}. ${q.q}</div>
+            <div class="options-grid">
+              ${q.opts.map((opt, optIdx) => `
+                <button class="option-btn" onclick="selectAnswer(${idx}, ${optIdx})" id="opt-${idx}-${optIdx}">
+                  ${opt}
+                </button>
+              `).join('')}
+            </div>
+            <div class="feedback" id="feedback-${idx}"></div>
+          </div>
+        `;
+      });
+      
+      html += `
+        <div style="display:flex;gap:1rem;margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(201,169,97,0.2);">
+          <button class="btn btn-secondary" onclick="closeModal()" style="flex:1;">Cancel</button>
+          <button class="btn btn-primary" onclick="submitAnswers()" style="flex:1;">Submit All</button>
+        </div>
+      `;
+      
+      content.innerHTML = html;
+      overlay.classList.add('show');
+    }
+
+    function selectAnswer(qIndex, optIndex) {
+      GAME.selectedAnswers[qIndex] = optIndex;
+      const card = document.querySelector(`[data-q-index="${qIndex}"]`);
+      const buttons = card.querySelectorAll('.option-btn');
+      buttons.forEach((btn, idx) => {
+        btn.classList.remove('selected');
+        if (idx === optIndex) btn.classList.add('selected');
+      });
+    }
+
+    function submitAnswers() {
+      const cellIndex = GAME.state.activeCell;
+      const questions = GAME.state.cellQuestionSets[cellIndex];
+      const isSpecial = GAME.state.specialCells.includes(cellIndex);
+      
+      let correctCount = 0;
+      
+      questions.forEach((q, idx) => {
+        const selected = GAME.selectedAnswers[idx];
+        const correct = q.ans;
+        const feedback = document.getElementById(`feedback-${idx}`);
+        const card = document.querySelector(`[data-q-index="${idx}"]`);
+        const buttons = card.querySelectorAll('.option-btn');
+        
+        buttons.forEach(btn => btn.disabled = true);
+        
+        GAME.profile.totalQuestions++;
+        
+        if (selected === correct) {
+          correctCount++;
+          feedback.innerHTML = `✅ Correct! ${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
+          feedback.className = 'feedback correct';
+          buttons[selected].classList.add('correct');
+          GAME.state.stats[GAME.state.currentTurn].streak++;
+          GAME.profile.totalCorrect++;
+        } else {
+          feedback.innerHTML = `❌ Wrong! Answer: ${q.opts[correct]}${q.exp ? `<div class="explanation">${q.exp}</div>` : ''}`;
+          feedback.className = 'feedback wrong';
+          if (selected !== undefined) buttons[selected].classList.add('wrong');
+          buttons[correct].classList.add('correct');
+          GAME.state.stats[GAME.state.currentTurn].streak = 0;
+        }
+      });
+      
+      const baseXP = correctCount * 10;
+      const bonusXP = isSpecial ? baseXP : 0;
+      awardXP(baseXP + bonusXP);
+      
+      GAME.state.stats[GAME.state.currentTurn].correctAnswers += correctCount;
+      
+      if (correctCount === GAME.settings.questionsPerCell) {
+        setTimeout(() => {
+          claimCell(cellIndex, isSpecial);
+          closeModal();
+          checkRoundEnd();
+        }, 2500);
+      } else {
+        setTimeout(() => {
+          showFeedback(`❌ ${correctCount}/${GAME.settings.questionsPerCell} correct!`, true);
+          switchTurn();
+          closeModal();
+        }, 3500);
+      }
+      
+      GAME.selectedAnswers = {};
+      updateStats();
+    }
+
+    function claimCell(cellIndex, isSpecial) {
+      GAME.state.boardState[cellIndex] = GAME.state.currentTurn;
+      GAME.state.stats[GAME.state.currentTurn].cellsClaimed++;
+      
+      const cell = document.querySelector(`[data-cell="${cellIndex}"]`);
+      cell.textContent = GAME.state.currentTurn === 'X' ? '❌' : '⭕';
+      cell.classList.add(`claimed-${GAME.state.currentTurn}`);
+      cell.classList.remove('special-cell');
+      
+      showFeedback(`🎉 ${GAME.state.currentTurn} claimed ${isSpecial ? 'BONUS ' : ''}cell!`, false);
+      
+      updateStats();
+      switchTurn();
+    }
+
+    function switchTurn() {
+      GAME.state.currentTurn = GAME.state.currentTurn === 'X' ? 'O' : 'X';
+      updateTurnIndicator();
+    }
+
+    function updateTurnIndicator() {
+      document.getElementById('panelX').classList.toggle('active', GAME.state.currentTurn === 'X');
+      document.getElementById('panelO').classList.toggle('active', GAME.state.currentTurn === 'O');
+    }
+
+    function checkRoundEnd() {
+      const size = GAME.settings.gridSize;
+      const b = GAME.state.boardState;
+      const patterns = [];
+      
+      for (let row = 0; row < size; row++) {
+        const pattern = [];
+        for (let col = 0; col < size; col++) pattern.push(row * size + col);
+        patterns.push(pattern);
+      }
+      
+      for (let col = 0; col < size; col++) {
+        const pattern = [];
+        for (let row = 0; row < size; row++) pattern.push(row * size + col);
+        patterns.push(pattern);
+      }
+      
+      const diag1 = [], diag2 = [];
+      for (let i = 0; i < size; i++) {
+        diag1.push(i * size + i);
+        diag2.push(i * size + (size - 1 - i));
+      }
+      patterns.push(diag1, diag2);
+      
+      for (let pattern of patterns) {
+        const values = pattern.map(i => b[i]);
+        if (values[0] && values.every(v => v === values[0])) {
+          handleRoundWin(values[0]);
+          return;
+        }
+      }
+      
+      if (b.every(cell => cell !== null)) {
+        handleRoundDraw();
+      }
+    }
+
+    function handleRoundWin(winner) {
+      GAME.state.stats[winner].roundsWon++;
+      updateStats();
+      awardXP(100);
+      
+      setTimeout(() => {
+        showFeedback(`🏆 ${winner} wins Round ${GAME.state.currentRound}!`, false);
+        
+        if (GAME.state.currentRound < GAME.settings.totalRounds) {
+          document.getElementById('nextRoundBtn').style.display = 'inline-block';
+        } else {
+          checkMatchWinner();
+        }
+      }, 1000);
+    }
+
+    function handleRoundDraw() {
+      setTimeout(() => {
+        showFeedback(`🤝 Round ${GAME.state.currentRound} is a draw!`, false);
+        
+        if (GAME.state.currentRound < GAME.settings.totalRounds) {
+          document.getElementById('nextRoundBtn').style.display = 'inline-block';
+        } else {
+          checkMatchWinner();
+        }
+      }, 1000);
+    }
+
+    function nextRound() {
+      GAME.state.currentRound++;
+      const size = GAME.settings.gridSize;
+      GAME.state.boardState = Array(size * size).fill(null);
+      GAME.state.cellQuestionSets = {};
+      GAME.state.currentTurn = 'X';
+      
+      const numSpecial = Math.floor(size * size * 0.2);
+      GAME.state.specialCells = [];
+      while (GAME.state.specialCells.length < numSpecial) {
+        const cell = Math.floor(Math.random() * size * size);
+        if (!GAME.state.specialCells.includes(cell)) {
+          GAME.state.specialCells.push(cell);
+        }
+      }
+      
+      document.getElementById('nextRoundBtn').style.display = 'none';
+      renderBoard();
+      updateTurnIndicator();
+    }
+
+    function checkMatchWinner() {
+      const xWins = GAME.state.stats.X.roundsWon;
+      const oWins = GAME.state.stats.O.roundsWon;
+      
+      setTimeout(() => {
+        if (xWins > oWins) {
+          showFeedback('🎊 PLAYER X WINS THE MATCH! 🎊', false);
+          awardXP(200);
+        } else if (oWins > xWins) {
+          showFeedback('🎊 PLAYER O WINS THE MATCH! 🎊', false);
+          awardXP(200);
+        } else {
+          showFeedback('🤝 MATCH ENDS IN A DRAW! 🤝', false);
+          awardXP(100);
+        }
+        
+        setTimeout(() => {
+          const playAgain = confirm('Game Over! Play again?');
+          if (playAgain) backToMenu();
+        }, 3000);
+      }, 2000);
+    }
+
+    function updateStats() {
+      document.getElementById('winsX').textContent = GAME.state.stats.X.roundsWon;
+      document.getElementById('cellsX').textContent = GAME.state.stats.X.cellsClaimed;
+      document.getElementById('correctX').textContent = GAME.state.stats.X.correctAnswers;
+      
+      document.getElementById('winsO').textContent = GAME.state.stats.O.roundsWon;
+      document.getElementById('cellsO').textContent = GAME.state.stats.O.cellsClaimed;
+      document.getElementById('correctO').textContent = GAME.state.stats.O.correctAnswers;
+    }
+
+    function backToMenu() {
+      if (confirm('Return to main menu? Progress will be lost.')) {
+        document.getElementById('gameArea').classList.add('hidden');
+        document.getElementById('gameSettings').classList.add('hidden');
+        document.getElementById('modeSelector').classList.remove('hidden');
+        document.getElementById('nextRoundBtn').style.display = 'none';
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      GAME.state.activeCell = null;
+    }
+
+    function showFeedback(msg, isError) {
+      const fb = document.getElementById('globalFeedback');
+      fb.textContent = msg;
+      fb.className = isError ? 'feedback-global error show' : 'feedback-global success show';
+      setTimeout(() => fb.classList.remove('show'), 3000);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProgress();
+      console.log('✅ INTUITY C1/C2 Conditionals Master loaded!');
+    });
+  </script>
+</body>
+</html>
