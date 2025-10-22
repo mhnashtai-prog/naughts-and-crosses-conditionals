@@ -1,0 +1,236 @@
+{
+  "ZeroFirst": {
+    "intermediate": [
+      {
+        "q": "If you _____ the button, the machine starts automatically.",
+        "opts": ["press", "will press", "would press", "pressed"],
+        "ans": 0,
+        "exp": "Zero conditional uses present simple in both clauses for things that always happen.",
+        "cat": "Zero/First"
+      },
+      {
+        "q": "If it _____ tomorrow, we will cancel the picnic.",
+        "opts": ["rains", "will rain", "would rain", "rained"],
+        "ans": 0,
+        "exp": "First conditional: present simple in if-clause for real future possibility.",
+        "cat": "Zero/First"
+      },
+      {
+        "q": "Unless you _____ harder, you won't pass the exam.",
+        "opts": ["study", "will study", "would study", "studied"],
+        "ans": 0,
+        "exp": "'Unless' means 'if not' and requires present simple in first conditional.",
+        "cat": "Zero/First"
+      },
+      {
+        "q": "If I _____ time tomorrow, I will help you with the project.",
+        "opts": ["have", "will have", "would have", "had"],
+        "ans": 0,
+        "exp": "First conditional: present simple after 'if' for future possibility.",
+        "cat": "Zero/First"
+      },
+      {
+        "q": "Water _____ if you heat it to 100 degrees Celsius.",
+        "opts": ["boils", "will boil", "would boil", "boiled"],
+        "ans": 0,
+        "exp": "Zero conditional for scientific facts - present simple in both clauses.",
+        "cat": "Zero/First"
+      },
+      {
+        "q": "If she _____ the train, she will arrive by 6 o'clock.",
+        "opts": ["catches", "will catch", "would catch", "caught"],
+        "ans": 0,
+        "exp": "First conditional: present simple in if-clause, 'will' in main clause.",
+        "cat": "Zero/First"
+      }
+    ],
+    "upper": [
+      {
+        "q": "Should you _____ any problems, please contact customer support immediately.",
+        "opts": ["experience", "will experience", "would experience", "experienced"],
+        "ans": 0,
+        "exp": "Formal first conditional: 'should + subject' = 'if + present simple'.",
+        "cat": "Zero/First"
+      },
+      {
+        "q": "Provided that everyone _____ their part, the project will be completed on time.",
+        "opts": ["does", "will do", "would do", "did"],
+        "ans": 0,
+        "exp": "'Provided that' requires present simple for future conditions.",
+        "cat": "Zero/First"
+      },
+      {
+        "q": "If the company _____ to expand overseas, it will need more investment.",
+        "opts": ["decides", "will decide", "would decide", "decided"],
+        "ans": 0,
+        "exp": "First conditional: present simple for real future possibility.",
+        "cat": "Zero/First"
+      },
+      {
+        "q": "Unless the situation _____, we will have to take further action.",
+        "opts": ["improves", "will improve", "would improve", "improved"],
+        "ans": 0,
+        "exp": "'Unless' (if not) takes present simple in first conditional.",
+        "cat": "Zero/First"
+      }
+    ]
+  },
+  "SecondThird": {
+    "intermediate": [
+      {
+        "q": "If I _____ a million dollars, I would travel around the world.",
+        "opts": ["have", "had", "would have", "will have"],
+        "ans": 1,
+        "exp": "Second conditional: past simple in if-clause for unreal present situation.",
+        "cat": "Second/Third"
+      },
+      {
+        "q": "If they _____ harder last year, they would have passed the exam.",
+        "opts": ["studied", "had studied", "would study", "study"],
+        "ans": 1,
+        "exp": "Third conditional: past perfect in if-clause for unreal past situation.",
+        "cat": "Second/Third"
+      },
+      {
+        "q": "I would buy that car if I _____ enough money.",
+        "opts": ["have", "had", "would have", "will have"],
+        "ans": 1,
+        "exp": "Second conditional: past simple for hypothetical present situation.",
+        "cat": "Second/Third"
+      },
+      {
+        "q": "If we _____ earlier, we wouldn't have missed the train.",
+        "opts": ["left", "had left", "would leave", "leave"],
+        "ans": 1,
+        "exp": "Third conditional: past perfect for unreal past action.",
+        "cat": "Second/Third"
+      },
+      {
+        "q": "She would help you if she _____ how to solve the problem.",
+        "opts": ["knows", "knew", "would know", "will know"],
+        "ans": 1,
+        "exp": "Second conditional: past simple for hypothetical present knowledge.",
+        "cat": "Second/Third"
+      },
+      {
+        "q": "If you _____ me about the party, I would have come.",
+        "opts": ["told", "had told", "would tell", "tell"],
+        "ans": 1,
+        "exp": "Third conditional: past perfect for unreal past situation.",
+        "cat": "Second/Third"
+      }
+    ],
+    "upper": [
+      {
+        "q": "Had I known about the meeting, I _____ attended.",
+        "opts": ["would", "will", "would have", "will have"],
+        "ans": 2,
+        "exp": "Inverted third conditional: 'had + subject + past participle' requires 'would have' in main clause.",
+        "cat": "Second/Third"
+      },
+      {
+        "q": "If the manager _____ more carefully, the mistake could have been avoided.",
+        "opts": ["checked", "had checked", "would check", "checks"],
+        "ans": 1,
+        "exp": "Third conditional: past perfect for unreal past action affecting past result.",
+        "cat": "Second/Third"
+      },
+      {
+        "q": "Were I in your position, I _____ differently.",
+        "opts": ["act", "acted", "would act", "will act"],
+        "ans": 2,
+        "exp": "Inverted second conditional: 'were + subject' requires 'would' in main clause.",
+        "cat": "Second/Third"
+      },
+      {
+        "q": "If the team _____ more experience, they would have won the competition.",
+        "opts": ["has", "had", "had had", "would have"],
+        "ans": 2,
+        "exp": "Third conditional: past perfect for unreal past situation.",
+        "cat": "Second/Third"
+      }
+    ]
+  },
+  "Mixed": {
+    "intermediate": [
+      {
+        "q": "If I _____ Spanish at school, I could work in Spain now.",
+        "opts": ["learned", "had learned", "would learn", "learn"],
+        "ans": 1,
+        "exp": "Mixed conditional: past perfect (past) → present conditional result.",
+        "cat": "Mixed"
+      },
+      {
+        "q": "If she _____ more responsible, she wouldn't have lost her job last month.",
+        "opts": ["was", "were", "had been", "would be"],
+        "ans": 1,
+        "exp": "Mixed conditional: past simple (general character) → past result.",
+        "cat": "Mixed"
+      },
+      {
+        "q": "If they _____ the house in 2010, they would be rich today.",
+        "opts": ["bought", "had bought", "would buy", "buy"],
+        "ans": 1,
+        "exp": "Mixed third→second: past perfect (past action) → present result.",
+        "cat": "Mixed"
+      }
+    ],
+    "upper": [
+      {
+        "q": "Had we invested in that company, we _____ financially secure now.",
+        "opts": ["will be", "would be", "would have been", "were"],
+        "ans": 1,
+        "exp": "Mixed third→second: inverted past perfect → present conditional result.",
+        "cat": "Mixed"
+      },
+      {
+        "q": "If the government _____ action earlier, the economy would be stronger today.",
+        "opts": ["took", "had taken", "would take", "takes"],
+        "ans": 1,
+        "exp": "Mixed conditional: past perfect (past inaction) → present consequence.",
+        "cat": "Mixed"
+      }
+    ]
+  },
+  "Alternatives": {
+    "intermediate": [
+      {
+        "q": "You will pass the test _____ you study regularly.",
+        "opts": ["if", "unless", "provided", "when"],
+        "ans": 2,
+        "exp": "'Provided' (provided that) expresses a positive condition.",
+        "cat": "Alternatives"
+      },
+      {
+        "q": "_____ I win the lottery, I would buy a big house.",
+        "opts": ["If", "Should", "Were", "Had"],
+        "ans": 1,
+        "exp": "'Should' in inverted first conditional for unlikely future event.",
+        "cat": "Alternatives"
+      },
+      {
+        "q": "We won't go to the beach _____ it stops raining.",
+        "opts": ["if", "unless", "provided", "when"],
+        "ans": 1,
+        "exp": "'Unless' means 'if not' - won't go if it doesn't stop raining.",
+        "cat": "Alternatives"
+      }
+    ],
+    "upper": [
+      {
+        "q": "_____ anyone call, please take a message.",
+        "opts": ["If", "Should", "Were", "Had"],
+        "ans": 1,
+        "exp": "Formal inverted first conditional: 'should' for possible future event.",
+        "cat": "Alternatives"
+      },
+      {
+        "q": "The project will succeed _____ adequate funding is secured.",
+        "opts": ["unless", "provided", "if not", "were"],
+        "ans": 1,
+        "exp": "'Provided' expresses necessary positive condition.",
+        "cat": "Alternatives"
+      }
+    ]
+  }
+}
