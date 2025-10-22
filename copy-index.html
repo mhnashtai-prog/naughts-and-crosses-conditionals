@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTUITY - C1/C2 Conditionals Master</title>
+  <title>INTUITY - Conditionals Master</title>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -89,6 +89,73 @@
       color: #636366;
       font-weight: 400;
       letter-spacing: 0.02em;
+    }
+
+    .level-toggle-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(20, 25, 30, 0.7);
+      border-radius: 1rem;
+      border: 1px solid rgba(201, 169, 97, 0.2);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .level-label {
+      font-size: 0.875rem;
+      color: #8e8e93;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+
+    .level-label.active {
+      color: #C9A961;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      background: rgba(201, 169, 97, 0.2);
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid rgba(201, 169, 97, 0.3);
+    }
+
+    .toggle-switch:hover {
+      border-color: #C9A961;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: #C9A961;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .toggle-switch.c1c2 .toggle-slider {
+      transform: translateX(30px);
+    }
+
+    .level-description {
+      text-align: center;
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: #636366;
+      font-style: italic;
     }
 
     .cambridge-badge {
@@ -975,16 +1042,27 @@
         <span class="xp-display" id="xpDisplay">Level 1 • 0 XP</span>
       </div>
       <h1>INTUITY</h1>
-      <p class="subtitle">C1/C2 Conditionals Master</p>
+      <p class="subtitle">Conditionals Master</p>
       <p class="author">by Majid Nashtai</p>
-      <div class="cambridge-badge">Advanced & Proficient Level</div>
+      
+      <!-- Level Toggle -->
+      <div class="level-toggle-container">
+        <span class="level-label active" id="labelB2">B2</span>
+        <div class="toggle-switch" id="levelToggle" onclick="toggleLevel()">
+          <div class="toggle-slider"></div>
+        </div>
+        <span class="level-label" id="labelC1C2">C1/C2</span>
+      </div>
+      <div class="level-description" id="levelDesc">Upper Intermediate</div>
+      
+      <div class="cambridge-badge" id="cambridgeBadge">Intermediate Level</div>
     </div>
 
     <div id="modeSelector" class="mode-selector">
       <div class="mode-card" onclick="selectMode('quick')">
         <div class="mode-icon">⚡</div>
         <div class="mode-title">Quick Battle</div>
-        <div class="mode-desc">3×3 grid, C1/C2 mixed conditionals</div>
+        <div class="mode-desc">3×3 grid, mixed conditionals</div>
         <div class="mode-stats">
           <div class="stat">
             <div class="stat-value">3×3</div>
@@ -1086,9 +1164,9 @@
 
         <div class="setting-group">
           <div class="setting-label">Difficulty Level</div>
-          <div class="difficulty-selector">
-            <button class="difficulty-btn active" onclick="setDifficulty('advanced')">C1</button>
-            <button class="difficulty-btn" onclick="setDifficulty('proficient')">C2</button>
+          <div class="difficulty-selector" id="difficultySelector">
+            <button class="difficulty-btn active" onclick="setDifficulty('intermediate')">B2.1</button>
+            <button class="difficulty-btn" onclick="setDifficulty('upper')">B2.2</button>
           </div>
         </div>
 
@@ -1200,87 +1278,198 @@
   <div class="feedback-global" id="globalFeedback"></div>
 
   <script>
-    // C1/C2 CONDITIONALS QUESTION BANK - British Publication Style
-    const QUESTION_BANK = {
-      "ZeroFirst": {
-        advanced: [
-          {q:"If you _____ water to 100°C at standard pressure, it always boils.",opts:["heat","will heat","would heat","heated"],ans:0,exp:"Zero conditional uses present simple in both clauses for universal truths.",cat:"Zero/First"},
-          {q:"Should the minister resign, the government _____ into constitutional crisis.",opts:["plunges","will plunge","would plunge","plunged"],ans:1,exp:"Inverted first conditional: 'should + subject' = 'if + present simple', main clause uses 'will'.",cat:"Zero/First"},
-          {q:"Unless the board _____ immediate action, shareholders will demand a public inquiry.",opts:["takes","will take","would take","took"],ans:0,exp:"'Unless' means 'if not' and requires present simple in first conditional.",cat:"Zero/First"},
-          {q:"If I _____ any further information, I shall contact you immediately.",opts:["will receive","receive","would receive","received"],ans:1,exp:"First conditional: present simple in if-clause, 'shall' (formal) or 'will' in main clause.",cat:"Zero/First"},
-          {q:"Provided that parliament _____ the bill, implementation will commence in April.",opts:["approves","will approve","would approve","approved"],ans:0,exp:"'Provided that' (conditional conjunction) takes present simple for future conditions.",cat:"Zero/First"},
-          {q:"Should it emerge that funds _____ diverted, regulatory action will follow.",opts:["were","will be","are","would be"],ans:0,exp:"After 'should it emerge that', use past simple (were) for hypothetical discovery.",cat:"Zero/First"},
-          {q:"If the accused _____ to appear, a warrant will be issued forthwith.",opts:["fails","will fail","would fail","failed"],ans:0,exp:"First conditional: present simple after 'if' for real future possibility.",cat:"Zero/First"},
-          {q:"Unless reform _____ implemented, the system will continue to deteriorate.",opts:["is","will be","would be","were"],ans:0,exp:"'Unless' + present simple passive for real negative condition.",cat:"Zero/First"}
-        ],
-        proficient: [
-          {q:"Were the allegations to prove substantiated, the administration _____ irreparably discredited.",opts:["will be","would be","is","were"],ans:1,exp:"Inverted second conditional: 'were + subject + to-infinitive' (formal hypothetical), main clause uses 'would'.",cat:"Zero/First"},
-          {q:"Should it transpire that documents _____ systematically falsified, criminal charges may ensue.",opts:["were","will be","are","would be"],ans:0,exp:"'Should it transpire that' + past simple for discovered past action.",cat:"Zero/First"},
-          {q:"If the tribunal _____ to uphold the appeal, precedent would be fundamentally altered.",opts:["is","were","will be","would be"],ans:1,exp:"Subjunctive 'were' (not 'was') in formal hypothetical present condition.",cat:"Zero/First"},
-          {q:"Supposing the merger _____ through, thousands of redundancies would inevitably follow.",opts:["goes","went","will go","would go"],ans:1,exp:"'Supposing' (conditional) + past simple for hypothetical future scenario.",cat:"Zero/First"},
-          {q:"Were Parliament to be prorogued unexpectedly, a constitutional crisis _____ unavoidable.",opts:["will be","would be","is","were"],ans:1,exp:"Inverted second conditional with 'were + to-infinitive' (formal hypothetical future).",cat:"Zero/First"},
-          {q:"Should the electorate _____ differently, the political landscape would be transformed.",opts:["vote","voted","will vote","would vote"],ans:0,exp:"'Should + subject + base form' = inverted first conditional (possible future).",cat:"Zero/First"}
-        ]
+    // GLOBAL STATE
+    let QUESTION_BANK = {};
+    let CURRENT_LEVEL = 'b2'; // 'b2' or 'c1c2'
+    
+    // Level configurations
+    const LEVEL_CONFIG = {
+      b2: {
+        jsonFile: 'questions-b2.json',
+        badge: 'Intermediate Level',
+        description: 'Upper Intermediate',
+        difficultyLevels: ['intermediate', 'upper'],
+        difficultyLabels: { intermediate: 'B2.1', upper: 'B2.2' }
       },
-      "SecondThird": {
-        advanced: [
-          {q:"If the government _____ earlier, the economic crisis might have been averted.",opts:["acted","had acted","would act","would have acted"],ans:1,exp:"Third conditional: past perfect in if-clause for unreal past condition.",cat:"Second/Third"},
-          {q:"Were it not for the intervention of the central bank, the market _____ collapsed entirely.",opts:["will have","would have","had","has"],ans:1,exp:"Inverted second conditional: 'were it not for' (present unreal), main clause 'would have' (past result).",cat:"Second/Third"},
-          {q:"If negotiations _____ more productively, an agreement might have been reached.",opts:["proceeded","had proceeded","would proceed","proceed"],ans:1,exp:"Third conditional: past perfect for unreal past action affecting past result.",cat:"Second/Third"},
-          {q:"Had the minister _____ transparent, the scandal could have been avoided.",opts:["been","be","is","was"],ans:0,exp:"Inverted third conditional: 'had + subject + past participle'.",cat:"Second/Third"},
-          {q:"If the evidence _____ available earlier, the verdict would have differed.",opts:["was","were","had been","would be"],ans:2,exp:"Third conditional: past perfect for unreal past circumstance.",cat:"Second/Third"},
-          {q:"Were the prime minister _____ unexpectedly, the deputy would assume office.",opts:["resign","to resign","resigned","resigning"],ans:1,exp:"Inverted second conditional: 'were + subject + to-infinitive' for hypothetical future.",cat:"Second/Third"},
-          {q:"If the committee _____ due diligence, the irregularities would have been detected.",opts:["exercised","had exercised","would exercise","exercises"],ans:1,exp:"Third conditional: past perfect for unreal past action.",cat:"Second/Third"},
-          {q:"Had whistleblowers not _____ forward, the fraud might never have been exposed.",opts:["come","came","coming","comes"],ans:0,exp:"Inverted third conditional: 'had + subject + past participle'.",cat:"Second/Third"}
-        ],
-        proficient: [
-          {q:"Had it not been for the whistleblower's intervention, the malpractice _____ undetected indefinitely.",opts:["might remain","might have remained","would remain","will have remained"],ans:1,exp:"Inverted third conditional: 'had it not been for' (unreal past), requires perfect conditional 'might have + past participle'.",cat:"Second/Third"},
-          {q:"If the allegations _____ substantiated beyond doubt, the implications would be far-reaching.",opts:["was","were","are","had been"],ans:1,exp:"Subjunctive 'were' (not 'was') for formal hypothetical present condition in unreal context.",cat:"Second/Third"},
-          {q:"Were successive administrations _____ fiscal prudence, the deficit would not exist today.",opts:["exercise","to have exercised","exercised","exercising"],ans:1,exp:"Mixed conditional: 'were + to have + past participle' (unreal past) → present result.",cat:"Second/Third"},
-          {q:"Had the regulators _____ their statutory duty, the systemic failures would have been prevented.",opts:["discharge","discharged","been discharging","to discharge"],ans:1,exp:"Inverted third conditional: 'had + subject + past participle' (formal past unreal).",cat:"Second/Third"},
-          {q:"If it _____ for entrenched vested interests, reform would have been implemented long ago.",opts:["wasn't","weren't","hadn't been","isn't"],ans:2,exp:"Third conditional: 'if it hadn't been for' (unreal past reason) → past result with 'would have'.",cat:"Second/Third"},
-          {q:"Were the tribunal _____ jurisdiction, the case would proceed to the Supreme Court.",opts:["lack","to lack","lacked","lacking"],ans:1,exp:"Inverted second conditional: 'were + subject + to-infinitive' for hypothetical present.",cat:"Second/Third"}
-        ]
-      },
-      "Mixed": {
-        advanced: [
-          {q:"If the economic policy _____ implemented differently, unemployment would not be so high today.",opts:["was implemented","had been implemented","would be implemented","were implemented"],ans:1,exp:"Mixed conditional: past perfect (unreal past action) → present conditional result.",cat:"Mixed"},
-          {q:"If I _____ that position when offered, I would be working in Brussels now.",opts:["accepted","would accept","had accepted","would have accepted"],ans:2,exp:"Mixed third→second: past perfect for past decision → present conditional result.",cat:"Mixed"},
-          {q:"Were I _____ at the time, I would have intervened immediately.",opts:["present","to be present","been present","being present"],ans:0,exp:"Inverted mixed conditional: 'were + subject + adjective' (past context) → past result.",cat:"Mixed"},
-          {q:"If she _____ more diplomatic in her approach, relations would not have deteriorated.",opts:["was","were","had been","would be"],ans:2,exp:"Third conditional: past perfect for unreal past behavior → past result.",cat:"Mixed"},
-          {q:"Had the infrastructure _____ properly, the current transport crisis would not exist.",opts:["maintain","maintained","been maintaining","been maintained"],ans:3,exp:"Mixed conditional: inverted past perfect passive (past) → present result.",cat:"Mixed"},
-          {q:"If successive governments _____ in education, standards would be higher today.",opts:["invested","had invested","would invest","would have invested"],ans:1,exp:"Mixed conditional: past perfect (past inaction) → present consequence.",cat:"Mixed"}
-        ],
-        proficient: [
-          {q:"Had the chancellor _____ greater fiscal prudence earlier, the economy would not be in recession now.",opts:["exercise","exercised","been exercising","have been exercising"],ans:1,exp:"Mixed third→second: inverted past perfect (past action) → present conditional result.",cat:"Mixed"},
-          {q:"If successive administrations _____ infrastructure systematically, the transport system would function efficiently today.",opts:["maintained","had maintained","would maintain","would have maintained"],ans:1,exp:"Mixed conditional: past perfect (continuous past failure) → present result.",cat:"Mixed"},
-          {q:"Were it not that the defendant _____ a diplomatic passport, extradition proceedings would have commenced.",opts:["holds","held","had held","would hold"],ans:1,exp:"Mixed inverted: 'were it not that' (present fact) → past conditional result.",cat:"Mixed"},
-          {q:"Had the electorate _____ more discerningly, the current political impasse would not have arisen.",opts:["vote","voted","been voting","to vote"],ans:1,exp:"Third conditional: inverted past perfect (past action) → past result.",cat:"Mixed"},
-          {q:"If the regulatory framework _____ more robust historically, such systemic failures would be unthinkable today.",opts:["was","were","had been","would be"],ans:2,exp:"Mixed conditional: past perfect (past state) → present conditional result.",cat:"Mixed"},
-          {q:"Were the opposition _____ a viable alternative previously, the government would have lost the election.",opts:["present","to present","to have presented","presented"],ans:2,exp:"Mixed inverted: 'were + to have + past participle' (unreal past) → past result.",cat:"Mixed"}
-        ]
-      },
-      "Alternatives": {
-        advanced: [
-          {q:"_____ the minister to resign abruptly, his deputy would assume the portfolio temporarily.",opts:["Should","Would","Could","Were"],ans:3,exp:"Inverted conditional: 'Were + subject + to-infinitive' for formal hypothetical future event.",cat:"Alternatives"},
-          {q:"The legislation will not pass _____ the government secures cross-party support.",opts:["if","unless","provided","when"],ans:1,exp:"'Unless' = 'if not'; expresses negative condition (will not pass if support NOT secured).",cat:"Alternatives"},
-          {q:"_____ the defendant to be acquitted, public confidence in the judiciary would be severely undermined.",opts:["Should","Were","Had","Would"],ans:1,exp:"'Were + subject + to-infinitive': formal inverted conditional for hypothetical outcome.",cat:"Alternatives"},
-          {q:"Negotiations will proceed smoothly _____ both parties demonstrate flexibility.",opts:["unless","provided","were","should"],ans:1,exp:"'Provided' (= 'provided that') expresses positive condition: only if this happens.",cat:"Alternatives"},
-          {q:"_____ the board approved the merger, shareholder consent would still be required.",opts:["Should","Were","Had","Even if"],ans:3,exp:"'Even if' + past simple for hypothetical concessive condition (contrasts with main clause).",cat:"Alternatives"},
-          {q:"The policy will succeed _____ adequate resources are allocated.",opts:["unless","only if","should","were"],ans:1,exp:"'Only if' (= 'provided that') expresses necessary condition: must have this.",cat:"Alternatives"}
-        ],
-        proficient: [
-          {q:"_____ the tribunal to uphold the original ruling, constitutional precedent would be fundamentally altered.",opts:["Should","Were","Had","Would"],ans:1,exp:"'Were + subject + to-infinitive': formal inverted second conditional for hypothetical future legal outcome.",cat:"Alternatives"},
-          {q:"The negotiations might have succeeded _____ both parties shown greater flexibility from the outset.",opts:["should","were","had","if"],ans:2,exp:"'Had + subject + past participle': inverted third conditional (unreal past condition).",cat:"Alternatives"},
-          {q:"_____ systemic reform to be implemented comprehensively, decades of entrenched dysfunction must be addressed.",opts:["Were","Should","For","Had"],ans:2,exp:"'For + noun/infinitive + to-infinitive': formal structure expressing necessary condition.",cat:"Alternatives"},
-          {q:"The defendant would face prosecution _____ for the diplomatic immunity he currently enjoys.",opts:["if it were not","were it not","had it not been","unless it were"],ans:1,exp:"'Were it not for': inverted second conditional expressing present contrary-to-fact reason.",cat:"Alternatives"},
-          {q:"_____ the minister to have resigned earlier, the scandal might never have escalated so dramatically.",opts:["Were","Had","Should","For"],ans:1,exp:"'Had + subject + past participle': inverted third conditional (unreal past action → past result).",cat:"Alternatives"},
-          {q:"The policy would never have been adopted _____ for the prime minister's personal intervention.",opts:["were it not","had it not been","should it not be","if it were not"],ans:1,exp:"'Had it not been for': inverted third conditional expressing past contrary-to-fact reason.",cat:"Alternatives"},
-          {q:"_____ to the proposal being approved unanimously, implementation will commence immediately.",opts:["Subject","Were","Should","Provided"],ans:0,exp:"'Subject to': formal phrase meaning 'conditional upon' or 'depending on'.",cat:"Alternatives"},
-          {q:"Sentencing will be deferred _____ the psychiatric assessment is completed satisfactorily.",opts:["unless","pending","were","should"],ans:1,exp:"'Pending' (= 'until') expresses temporal condition: waiting for this to happen.",cat:"Alternatives"}
-        ]
+      c1c2: {
+        jsonFile: 'questions-c1c2.json',
+        badge: 'Advanced & Proficient Level',
+        description: 'Advanced & Proficient',
+        difficultyLevels: ['advanced', 'proficient'],
+        difficultyLabels: { advanced: 'C1', proficient: 'C2' }
       }
     };
+
+    // Load questions from JSON
+    async function loadQuestions(level) {
+      try {
+        const config = LEVEL_CONFIG[level];
+        const response = await fetch(config.jsonFile);
+        if (!response.ok) throw new Error(`Failed to load ${config.jsonFile}`);
+        QUESTION_BANK = await response.json();
+        console.log(`✅ Loaded ${level.toUpperCase()} questions`);
+      } catch (error) {
+        console.error('Error loading questions:', error);
+        alert('Failed to load questions. Please ensure questions-b2.json and questions-c1c2.json are in the same directory as this HTML file.');
+      }
+    }
+
+    // Toggle between B2 and C1/C2
+    async function toggleLevel() {
+      const toggle = document.getElementById('levelToggle');
+      const labelB2 = document.getElementById('labelB2');
+      const labelC1C2 = document.getElementById('labelC1C2');
+      const badge = document.getElementById('cambridgeBadge');
+      const desc = document.getElementById('levelDesc');
+      
+      // Toggle state
+      CURRENT_LEVEL = CURRENT_LEVEL === 'b2' ? 'c1c2' : 'b2';
+      const config = LEVEL_CONFIG[CURRENT_LEVEL];
+      
+      // Update UI
+      toggle.classList.toggle('c1c2');
+      
+      if (CURRENT_LEVEL === 'c1c2') {
+        labelB2.classList.remove('active');
+        labelC1C2.classList.add('active');
+      } else {
+        labelB2.classList.add('active');
+        labelC1C2.classList.remove('active');
+      }
+      
+      badge.textContent = config.badge;
+      desc.textContent = config.description;
+      
+      // Load new questions
+      await loadQuestions(CURRENT_LEVEL);
+      
+      // Reset game if in progress
+      if (!document.getElementById('gameArea').classList.contains('hidden')) {
+        if (confirm('Changing level will reset the current game. Continue?')) {
+          backToMenu();
+        } else {
+          // Revert toggle
+          CURRENT_LEVEL = CURRENT_LEVEL === 'b2' ? 'c1c2' : 'b2';
+          toggle.classList.toggle('c1c2');
+          
+          if (CURRENT_LEVEL === 'c1c2') {
+            labelB2.classList.remove('active');
+            labelC1C2.classList.add('active');
+          } else {
+            labelB2.classList.add('active');
+            labelC1C2.classList.remove('active');
+          }
+          
+          badge.textContent = LEVEL_CONFIG[CURRENT_LEVEL].badge;
+          desc.textContent = LEVEL_CONFIG[CURRENT_LEVEL].description;
+        }
+      }
+      
+      // Update difficulty buttons
+      updateDifficultyButtons();
+    }
+
+    function updateDifficultyButtons() {
+      const config = LEVEL_CONFIG[CURRENT_LEVEL];
+      const diffSelector = document.getElementById('difficultySelector');
+      
+      if (diffSelector) {
+        const buttons = config.difficultyLevels.map((level, idx) => {
+          const label = config.difficultyLabels[level];
+          const active = idx === 0 ? 'active' : '';
+          return `<button class="difficulty-btn ${active}" onclick="setDifficulty('${level}')">${label}</button>`;
+        }).join('');
+        
+        diffSelector.innerHTML = buttons;
+      }
+    }
+
+    function setDifficulty(level) {
+      GAME.settings.difficulty = level;
+      document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    function getDefaultDifficulty() {
+      return LEVEL_CONFIG[CURRENT_LEVEL].difficultyLevels[0];
+    }
+
+    const MODE_PRESETS = {
+      'quick': () => ({ 
+        gridSize: 3, 
+        totalRounds: 1, 
+        questionsPerCell: 5, 
+        timerEnabled: false, 
+        difficulty: getDefaultDifficulty(), 
+        specialCellsEnabled: true 
+      }),
+      'advanced': () => ({ 
+        gridSize: 3, 
+        totalRounds: 3, 
+        questionsPerCell: 5, 
+        timerEnabled: false, 
+        difficulty: getDefaultDifficulty(), 
+        specialCellsEnabled: true 
+      }),
+      'marathon': () => ({ 
+        gridSize: 4, 
+        totalRounds: 1, 
+        questionsPerCell: 4, 
+        timerEnabled: true, 
+        difficulty: LEVEL_CONFIG[CURRENT_LEVEL].difficultyLevels[1], 
+        specialCellsEnabled: true 
+      }),
+      'custom': () => ({ 
+        gridSize: 3, 
+        totalRounds: 1, 
+        questionsPerCell: 5, 
+        timerEnabled: false, 
+        difficulty: getDefaultDifficulty(), 
+        specialCellsEnabled: true 
+      })
+    };
+
+    function selectMode(mode) {
+      GAME.mode = mode;
+      const settings = MODE_PRESETS[mode]();
+      
+      GAME.settings = {...settings};
+      
+      if (mode === 'custom') {
+        document.getElementById('modeSelector').classList.add('hidden');
+        document.getElementById('gameSettings').classList.remove('hidden');
+        
+        document.getElementById('gridSizeSlider').value = settings.gridSize;
+        document.getElementById('roundsSlider').value = settings.totalRounds;
+        document.getElementById('questionsSlider').value = settings.questionsPerCell;
+        document.getElementById('timerCheckbox').checked = settings.timerEnabled;
+        document.getElementById('specialCellsCheckbox').checked = settings.specialCellsEnabled;
+        
+        updateGridSize(settings.gridSize);
+        updateRounds(settings.totalRounds);
+        updateQuestions(settings.questionsPerCell);
+        updateDifficultyButtons();
+        setDifficultyProgrammatically(settings.difficulty);
+      } else {
+        startGame();
+      }
+    }
+
+    function setDifficultyProgrammatically(level) {
+      GAME.settings.difficulty = level;
+      document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent === LEVEL_CONFIG[CURRENT_LEVEL].difficultyLabels[level]) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    function getStorageKey() {
+      return `intuityConditionalsProgress_${CURRENT_LEVEL}`;
+    }
 
     // ACHIEVEMENTS SYSTEM
     const ACHIEVEMENTS = {
@@ -1304,7 +1493,7 @@
         totalRounds: 1,
         questionsPerCell: 5,
         timerEnabled: false,
-        difficulty: 'advanced',
+        difficulty: 'intermediate',
         specialCellsEnabled: true
       },
       state: {
@@ -1347,7 +1536,7 @@
     };
 
     function loadProgress() {
-      const saved = storage.getItem('intuityConditionalsProgress');
+      const saved = storage.getItem(getStorageKey());
       if (saved) {
         try {
           const data = JSON.parse(saved);
@@ -1358,7 +1547,7 @@
     }
 
     function saveProgress() {
-      storage.setItem('intuityConditionalsProgress', JSON.stringify(GAME.profile));
+      storage.setItem(getStorageKey(), JSON.stringify(GAME.profile));
     }
 
     function updateXPDisplay() {
@@ -1448,38 +1637,6 @@
       });
     }
 
-    const MODE_PRESETS = {
-      'quick': { gridSize: 3, totalRounds: 1, questionsPerCell: 5, timerEnabled: false, difficulty: 'advanced', specialCellsEnabled: true },
-      'advanced': { gridSize: 3, totalRounds: 3, questionsPerCell: 5, timerEnabled: false, difficulty: 'advanced', specialCellsEnabled: true },
-      'marathon': { gridSize: 4, totalRounds: 1, questionsPerCell: 4, timerEnabled: true, difficulty: 'proficient', specialCellsEnabled: true },
-      'custom': { gridSize: 3, totalRounds: 1, questionsPerCell: 5, timerEnabled: false, difficulty: 'advanced', specialCellsEnabled: true }
-    };
-
-    function selectMode(mode) {
-      GAME.mode = mode;
-      const settings = MODE_PRESETS[mode];
-      
-      GAME.settings = {...settings};
-      
-      if (mode === 'custom') {
-        document.getElementById('modeSelector').classList.add('hidden');
-        document.getElementById('gameSettings').classList.remove('hidden');
-        
-        document.getElementById('gridSizeSlider').value = settings.gridSize;
-        document.getElementById('roundsSlider').value = settings.totalRounds;
-        document.getElementById('questionsSlider').value = settings.questionsPerCell;
-        document.getElementById('timerCheckbox').checked = settings.timerEnabled;
-        document.getElementById('specialCellsCheckbox').checked = settings.specialCellsEnabled;
-        
-        updateGridSize(settings.gridSize);
-        updateRounds(settings.totalRounds);
-        updateQuestions(settings.questionsPerCell);
-        setDifficulty(settings.difficulty);
-      } else {
-        startGame();
-      }
-    }
-
     function updateGridSize(val) {
       GAME.settings.gridSize = parseInt(val);
       document.getElementById('gridSizeValue').textContent = `${val}×${val}`;
@@ -1501,14 +1658,6 @@
 
     function updateSpecialCells(checked) {
       GAME.settings.specialCellsEnabled = checked;
-    }
-
-    function setDifficulty(level) {
-      GAME.settings.difficulty = level;
-      document.querySelectorAll('.difficulty-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-      event.target.classList.add('active');
     }
 
     function backToModes() {
@@ -1621,7 +1770,6 @@
       GAME.state.activeCell = cellIndex;
       GAME.state.questionStartTime = Date.now();
       
-      // Always generate fresh questions
       GAME.state.cellQuestionSets[cellIndex] = selectFreshQuestions();
       
       const questions = GAME.state.cellQuestionSets[cellIndex];
@@ -2078,14 +2226,17 @@
     }
 
     function backToMenu() {
-      if (confirm('Return to main menu? All progress will be lost.')) {
-        resetGame();
-        stopTimer();
-        document.getElementById('gameArea').classList.add('hidden');
-        document.getElementById('gameSettings').classList.add('hidden');
-        document.getElementById('modeSelector').classList.remove('hidden');
-        document.getElementById('nextRoundBtn').style.display = 'none';
+      if (!document.getElementById('gameArea').classList.contains('hidden')) {
+        if (!confirm('Return to main menu? All progress will be lost.')) {
+          return;
+        }
       }
+      resetGame();
+      stopTimer();
+      document.getElementById('gameArea').classList.add('hidden');
+      document.getElementById('gameSettings').classList.add('hidden');
+      document.getElementById('modeSelector').classList.remove('hidden');
+      document.getElementById('nextRoundBtn').style.display = 'none';
     }
     
     function resetGame() {
@@ -2124,9 +2275,11 @@
       if (e.key === 'Escape') closeModal();
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
+      await loadQuestions(CURRENT_LEVEL);
       loadProgress();
-      console.log('✅ INTUITY C1/C2 Conditionals Master loaded!');
+      updateDifficultyButtons();
+      console.log('✅ INTUITY Conditionals Master loaded!');
     });
   </script>
 </body>
